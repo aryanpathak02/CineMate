@@ -38,7 +38,6 @@ function DetailPage() {
                 videos: videos.data.results.find((m) => m.type === "Trailer"),
                 watchproviders: watchproviders.data.results.IN,
             };
-            console.log(fetchedData);
             setTheUltimateDetails(fetchedData);
             setLoading(false);
         } catch (err) {
@@ -112,14 +111,14 @@ function DetailPage() {
                 </div>
                 <div className="space-y-4 flex-1">
                     <h1 className="text-4xl font-bold">{detail.title || detail.name}</h1>
-                    <div className="text-xs space-x-5 flex items-center">
-                        <span className="bg-[#CA8A04] rounded-full w-10 h-10 font-bold flex items-center justify-center">
+                    <div className="text-xs space-x-5 flex-wrap flex items-center ">
+                        <span className="bg-[#CA8A04]  rounded-full w-10 h-10 font-bold flex items-center justify-center">
                             {Math.floor(detail.vote_average * 10)}%
                         </span>
-                        <span className="text-xl">User Score</span>
+                        <span className="text-xl my-2">User Score</span>
                         <span>{detail.release_date || detail.first_air_date}</span>
                         <span>{detail.genres.map((elem, index) => (<span key={index} className="mr-1">{elem.name}</span>))}</span>
-                        <span>{detail.runtime }  </span>
+                        <span>{detail.runtime}  </span>
                     </div>
                     <p className="text-zinc-300 italic font-semibold">{detail.tagline}</p>
                     <h2 className="text-lg font-semibold">Overview</h2>
@@ -136,40 +135,87 @@ function DetailPage() {
                     )}
                 </div>
             </main>
-    
-           {detail.seasons ? ( 
-            <>
-            <hr /> 
-            <section className="w-full py-6">
-              <h3 className={`font-bold text-zinc-400 text-3xl`}>Seasons</h3>
-                <div className="flex flex-nowrap items-start overflow-x-auto space-x-5 my-8">
-                    {detail.seasons.map((element, index) => (
-                        <div className="w-36 sm:w-48 flex-none mb-6" key={index}>
-                            <img className="w-full object-contain" src={element.poster_path ? `https://image.tmdb.org/t/p/original/${element.poster_path}` : `https://www.istockphoto.com/photos/image-not-found`} alt="movie/tv-poster" />
-                            <div className="py-2 px-4">
-                                <h4 className="sm:text-xl my-3">{element.original_title || element.name}</h4>
-                            </div>
+            <aside>
+                {watchproviders && watchproviders.flatrate && (
+                    <div className=" text-white py-6">
+                        <h1>Available on Platfotms</h1>
+                        <div className="flex items-center mt-3 flex-wrap gap-x-6">
+                            {watchproviders.flatrate.map((w, i) => (
+                                <img
+                                    key={i}
+                                    title={w.provider_name}
+                                    className="w-[5vh] m-2 h-[5vh] object-cover rounded-md"
+                                    src={`https://image.tmdb.org/t/p/original/${w.logo_path}`}
+                                    alt=""
+                                />
+                            ))}
                         </div>
-                    ))}
-                </div>
-            </section></>) : null }
-          
-    
-         
-            <hr />
-         
+                    </div>
+                )}
+
+                {watchproviders && watchproviders.rent && (
+                    <div className=" text-white py-4">
+                        <h1>Available on Rent</h1>
+                        <div className="flex items-center mt-3 flex-wrap gap-x-6">
+
+                            {watchproviders.rent.map((w, i) => (
+                                <img
+                                    key={i}
+                                    title={w.provider_name}
+                                    className="w-[5vh] h-[5vh] m-1 object-cover rounded-md"
+                                    src={`https://image.tmdb.org/t/p/original/${w.logo_path}`}
+                                    alt=""
+                                />
+                            ))}
+                        </div>
+
+                    </div>
+                )}
+
+                {watchproviders && watchproviders.buy && (
+                    <div className="text-white py-4">
+                        <h1>Available to Buy</h1>
+                        <div className="flex items-center mt-3 flex-wrap gap-x-6">
+                            {watchproviders.buy.map((w, i) => (
+                                <img
+                                    key={i}
+                                    title={w.provider_name}
+                                    className="w-[5vh] m-1 h-[5vh] object-cover rounded-md"
+                                    src={`https://image.tmdb.org/t/p/original/${w.logo_path}`}
+                                    alt=""
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </aside>
+
+            {detail.seasons ? (
+                <>
+                    <hr />
+                    <section className="w-full py-6">
+                        <h3 className={`font-bold text-zinc-400 text-3xl`}>Seasons</h3>
+                        <div className="flex flex-nowrap items-start overflow-x-auto space-x-5 my-8">
+                            {detail.seasons.map((element, index) => (
+                                <div className="w-36 sm:w-48 flex-none mb-6" key={index}>
+                                    <img className="w-full object-contain" src={element.poster_path ? `https://image.tmdb.org/t/p/original/${element.poster_path}` : `https://www.istockphoto.com/photos/image-not-found`} alt="movie/tv-poster" />
+                                    <div className="py-2 px-4">
+                                        <h4 className="sm:text-xl my-3">{element.original_title || element.name}</h4>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section></>) : null}
+
+
+
+
             {/* Loader for recommendations or similar */}
             {recommendationsLoading || similarLoading ? <Loader /> : null}
 
-            {watchproviders && watchproviders.flatrate && (
-                <div className="flex gap-x-10 items-center text-white">
-                    <h1>Available on Platforms</h1>
-                    {watchproviders.flatrate.map((w, i) => (
-                        <img key={i} title={w.provider_name} className="w-[5vh] h-[5vh] object-cover rounded-md" src={`https://image.tmdb.org/t/p/original/${w.logo_path}`} alt="" />
-                    ))}
-                </div>
-            )}
 
+
+            <hr />
 
             <Horizontalcard data={recommendations.length > 0 ? recommendations : similar} description={"Recommendations & Similar stuff"} type={type} />
 

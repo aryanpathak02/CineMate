@@ -10,7 +10,7 @@ function Searchbar() {
   const searchKey = async () => {
     try {
       const { data } = await axios.get(`/search/multi?query=${query}`);
-      console.log(data.results);
+      // console.log(data.results);
       setsearches(data.results);
     } catch (err) {
       console.log(`Error while searching a move ${err.message}`);
