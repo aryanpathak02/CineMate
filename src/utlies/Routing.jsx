@@ -10,6 +10,8 @@ import PeopleDetail from '../Pages/PeopleDetail'
 import Trailer from '../partials/Trailer'
 import About from '../Pages/About'
 import ContactPage from '../Pages/ContactPage'
+import NotFound from '../partials/Notfound'
+
 
 function Routing() {
   return (
@@ -27,6 +29,8 @@ function Routing() {
       <Route path="/detail/:type/:id" element={<DetailPage />} >
         <Route path='/detail/:type/:id/trailer/:key' element={<Trailer />} />
       </Route>
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
